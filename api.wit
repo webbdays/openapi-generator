@@ -1,0 +1,106 @@
+// wit.mustache - Main template
+// todo.wit
+package todo:api;
+
+// Common types and error definitions
+record error {
+    code: s32,
+    message: string,
+}
+
+// Model definitions
+record Error {
+    error_type: string,
+}
+
+record ErrorError {
+    code: _empty,
+    message: string,
+    details: list&lt;ErrorErrorDetailsInner&gt;,
+}
+
+record ErrorErrorDetailsInner {
+    field: string,
+    message: string,
+}
+
+record Todo {
+    id: string,
+    title: string,
+    description: string,
+    completed: bool,
+    dueDate: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+}
+
+record TodoCreate {
+    title: string,
+    description: string,
+    dueDate: string,
+    userId: string,
+}
+
+record TodoList {
+    data: list&lt;Todo&gt;,
+    metadata: string,
+}
+
+record TodoListMetadata {
+    total: s32,
+    limit: s32,
+    offset: s32,
+}
+
+record TodoResponse {
+    data: string,
+}
+
+record TodoUpdate {
+    title: string,
+    description: string,
+    completed: bool,
+    dueDate: string,
+}
+
+
+// API interfaces
+interface DefaultApi {
+    // List todos
+    todos-get: func(
+        userId: string,
+        status: _empty,
+        limit: s32,
+        offset: s32,
+        sortBy: _empty,
+        sortOrder: _empty
+    ) -> expected&lt;string, error&gt;;
+    
+    // Create a new todo
+    todos-post: func(
+        todoCreate: TodoCreate
+    ) -> expected&lt;string, error&gt;;
+    
+    // Delete a todo
+    todos-todo-id-delete: func(
+        todoId: string
+    ) -> expected&lt;void, error&gt;;
+    
+    // Get a specific todo
+    todos-todo-id-get: func(
+        todoId: string
+    ) -> expected&lt;string, error&gt;;
+    
+    // Update a todo
+    todos-todo-id-patch: func(
+        todoId: string,
+        todoUpdate: TodoUpdate
+    ) -> expected&lt;string, error&gt;;
+    
+}
+
+// World definition
+world todo-world {
+    export DefaultApi;
+}

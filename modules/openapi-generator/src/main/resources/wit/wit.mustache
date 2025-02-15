@@ -1,0 +1,70 @@
+// wit.mustache - Main template
+// {{packageName}}.wit
+package {{packageName}}:api;
+
+// Common types and error definitions
+{{errorType}}
+
+// Model definitions
+{{#models}}
+{{#model}}
+{{#isEnum}}
+enum {{classname}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{.}},
+{{/enumVars}}
+{{/allowableValues}}
+}
+{{/isEnum}}
+{{^isEnum}}
+{{#isOneOf}}
+variant {{classname}} {
+{{#vendorExtensions.x-wit-variants}}
+    {{name}}({{type}}),
+{{/vendorExtensions.x-wit-variants}}
+}
+{{/isOneOf}}
+{{^isOneOf}}
+record {{classname}} {
+{{#vars}}
+    {{name}}: {{dataType}},
+{{/vars}}
+}
+{{/isOneOf}}
+{{/isEnum}}
+
+{{/model}}
+{{/models}}
+
+// API interfaces
+{{#apiInfo}}
+{{#apis}}
+interface {{classname}} {
+    {{#operations}}
+    {{#operation}}
+    // {{summary}}
+    {{#notes}}
+    // {{notes}}
+    {{/notes}}
+    {{operationId}}: func(
+        {{#allParams}}
+        {{paramName}}: {{dataType}}{{^-last}},{{/-last}}
+        {{/allParams}}
+    ) -> {{vendorExtensions.x-wit-return}};
+    
+    {{/operation}}
+    {{/operations}}
+}
+{{/apis}}
+{{/apiInfo}}
+
+// World definition
+world {{packageName}}-world {
+    {{#apiInfo}}
+    {{#apis}}
+    export {{classname}};
+    {{/apis}}
+    {{/apiInfo}}
+}
+

@@ -19,6 +19,7 @@ package org.openapitools.codegen;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.media.Discriminator;
 
 import java.util.*;
 
@@ -103,14 +104,14 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
      *      type: string
      *  Dog:
      *    allOf:
-     *    - $ref: '#/components/schemas/Pet'
+     *    - : '#/components/schemas/Pet'
      *    - type: object
      *      properties:
      *        p1:
      *          type: string
      *  Cat:
      *    allOf:
-     *    - $ref: '#/components/schemas/Pet'
+     *    - : '#/components/schemas/Pet'
      *    - type: object
      *      properties:
      *        p2:
@@ -118,7 +119,7 @@ public class CodegenModel implements IJsonSchemaValidationProperties {
      *
      * @return the discriminator.
      */
-    @Getter public CodegenDiscriminator discriminator;
+    @Getter public Discriminator discriminator;
     @Getter @Setter
     public String defaultValue;
     @Getter @Setter

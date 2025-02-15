@@ -1,0 +1,74 @@
+
+// README.mustache
+# {{packageName}} WebAssembly Interface Types
+
+This directory contains WIT (WebAssembly Interface Type) definitions generated from an OpenAPI specification.
+
+## Structure
+
+- `api.wit`: The main WIT file containing all interfaces and types
+- This README
+
+## Usage
+
+These WIT definitions can be used with WebAssembly component model tools like `wit-bindgen` to generate bindings for various languages.
+
+### Example (Rust)
+
+```bash
+wit-bindgen rust api.wit --out-dir ./src/bindings
+```
+
+## Types
+
+{{#models}}
+{{#model}}
+### {{classname}}
+
+{{#isEnum}}
+Enum with values: {{#allowableValues}}{{#enumVars}}{{.}}{{^-last}}, {{/-last}}{{/enumVars}}{{/allowableValues}}
+{{/isEnum}}
+{{^isEnum}}
+{{#isOneOf}}
+Variant type with cases:
+{{#vendorExtensions.x-wit-variants}}
+- {{name}}: {{type}}
+{{/vendorExtensions.x-wit-variants}}
+{{/isOneOf}}
+{{^isOneOf}}
+Record with fields:
+{{#vars}}
+- {{name}}: {{dataType}}
+{{/vars}}
+{{/isOneOf}}
+{{/isEnum}}
+
+{{/model}}
+{{/models}}
+
+## APIs
+
+{{#apiInfo}}
+{{#apis}}
+### {{classname}}
+
+{{#operations}}
+{{#operation}}
+#### {{operationId}}
+
+{{summary}}
+{{#notes}}
+{{notes}}
+{{/notes}}
+
+Parameters:
+{{#allParams}}
+- {{paramName}}: {{dataType}}
+{{/allParams}}
+
+Returns: {{vendorExtensions.x-wit-return}}
+
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
